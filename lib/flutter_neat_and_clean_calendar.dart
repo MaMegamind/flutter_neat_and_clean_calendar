@@ -18,7 +18,7 @@ import './simple_gesture_detector.dart';
 // Export NeatCleanCalendarEvent for using it in the application
 export './neat_and_clean_calendar_event.dart';
 
-typedef DayBuilder(BuildContext context, DateTime day,bool inMonth);
+typedef DayBuilder(BuildContext context, DateTime day, bool inMonth);
 typedef EventListBuilder(BuildContext context, List<NeatCleanCalendarEvent> events);
 
 enum DatePickerType { hidden, year, date }
@@ -443,12 +443,13 @@ class _CalendarState extends State<Calendar> {
             ),
             // SizedBox(height: 12.0),
             Container(
-              padding: EdgeInsets.only(top: 12.0,bottom: 12),
-              margin: EdgeInsets.all( 12.0),
+              padding: EdgeInsets.only(top: 12.0, bottom: 12),
+              margin: EdgeInsets.all(12.0),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10.0,),
-                color: Color(0xFFEBEBEB)
-              ),
+                  borderRadius: BorderRadius.circular(
+                    10.0,
+                  ),
+                  color: Color(0xFFEBEBEB)),
               child: GridView.count(
                 childAspectRatio: 1.5,
                 primary: false,
@@ -529,7 +530,7 @@ class _CalendarState extends State<Calendar> {
               eventColor: widget.eventColor,
               eventDoneColor: widget.eventDoneColor,
               events: eventsMap![day],
-              child: widget.dayBuilder!(context, day,day.month == selectedDate.month),
+              child: widget.dayBuilder!(context, day, day.month == selectedDate.month),
               date: day,
               onDateSelected: () => handleSelectedDateAndUserCallback(day),
             ),
@@ -582,33 +583,64 @@ class _CalendarState extends State<Calendar> {
       return GestureDetector(
         onTap: toggleExpanded,
         child: Container(
-          color: widget.bottomBarColor ?? Color.fromRGBO(200, 200, 200, 0.2),
+          //color: widget.bottomBarColor ?? Color.fromRGBO(200, 200, 200, 0.2),
           height: 40,
           margin: EdgeInsets.only(top: 8.0),
           padding: EdgeInsets.all(0),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+              PlatformIconButton(
+                onPressed: () {},
+                icon: Container(
+                  padding: EdgeInsets.all(0.0),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Color(0xFF3DB3E3),
+                  ),
+                  child: Icon(
+                    Icons.keyboard_arrow_left_outlined,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
               SizedBox(width: 40.0),
               Text(
                 DateFormat(widget.expandableDateFormat, widget.locale).format(_selectedDate),
                 style: widget.bottomBarTextStyle ?? TextStyle(fontSize: 13),
               ),
+              SizedBox(width: 40.0),
+
               PlatformIconButton(
-                onPressed: toggleExpanded,
-                padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
-                icon: isExpanded
-                    ? Icon(
-                        Icons.arrow_drop_up,
-                        size: 25.0,
-                        color: widget.bottomBarArrowColor ?? Colors.black,
-                      )
-                    : Icon(
-                        Icons.arrow_drop_down,
-                        size: 25.0,
-                        color: widget.bottomBarArrowColor ?? Colors.black,
-                      ),
+                onPressed: () {},
+                icon: Container(
+                  padding: EdgeInsets.all(0.0),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Color(0xFF3DB3E3),
+                  ),
+                  child: Icon(
+                    Icons.keyboard_arrow_right_outlined,
+                    color: Colors.white,
+                  ),
+                ),
               ),
+
+              // PlatformIconButton(
+              //   onPressed: toggleExpanded,
+              //   padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
+              //   icon: isExpanded
+              //       ? Icon(
+              //           Icons.arrow_drop_up,
+              //           size: 25.0,
+              //           color: widget.bottomBarArrowColor ?? Colors.black,
+              //         )
+              //       : Icon(
+              //           Icons.arrow_drop_down,
+              //           size: 25.0,
+              //           color: widget.bottomBarArrowColor ?? Colors.black,
+              //         ),
+              // ),
             ],
           ),
         ),
@@ -802,6 +834,7 @@ class _CalendarState extends State<Calendar> {
             isExpanded: isExpanded,
           ),
           expansionButtonRow,
+          SizedBox(height: 12.0),
           if (widget.showEvents) eventList
         ],
       ),
