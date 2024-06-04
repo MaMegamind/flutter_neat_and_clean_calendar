@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_neat_and_clean_calendar/provider_image.dart';
+import "package:intl/intl.dart";
+
 // import 'package:flutter_neat_and_clean_calendar/platform_widgets.dart';
 import './date_utils.dart';
 import './neat_and_clean_calendar_event.dart';
-import "package:intl/intl.dart";
 
 /// [NeatCleanCalendarTile] is responsible for displaying one calendar event entry below
 /// the week view or the month view. The events are displayed in a list of [NeatCleanCalendarTile].
@@ -79,6 +80,11 @@ class NeatCleanCalendarTile extends StatelessWidget {
       return new GestureDetector(
         child: new Container(
           alignment: Alignment.center,
+          margin: EdgeInsets.symmetric(horizontal: 12),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20.0),
+            color: Color(0xFFEBEBEB),
+          ),
           child: Text(
             dayOfWeek ?? '',
             style: dayOfWeekStyle,
@@ -155,7 +161,7 @@ class NeatCleanCalendarTile extends StatelessWidget {
                                     : Colors.grey),
                   ),
                   // Grey color for previous or next months dates
-                ),
+                ), 
                 // Dots for the events
                 events != null && events!.length > 0
                     ? Row(
