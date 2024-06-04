@@ -111,7 +111,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
       body: SafeArea(
         child: Calendar(
           startOnMonday: true,
-          weekDays: ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'],
+          weekDays: ['M', 'D', 'M', 'D', 'F', 'S', 'S'],
           eventsList: _eventList,
           isExpandable: true,
           eventDoneColor: Colors.deepPurple,
@@ -141,6 +141,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
             print('Range selected ${value.from} - ${value.to}');
           },
           datePickerType: DatePickerType.date,
+          defaultDayColor: Colors.green,
+          defaultOutOfMonthDayColor: Colors.grey,
           dayOfWeekStyle: TextStyle(
               color: Colors.black, fontWeight: FontWeight.w800, fontSize: 11),
           showEvents: showEvents,

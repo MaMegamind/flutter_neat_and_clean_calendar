@@ -151,17 +151,13 @@ class NeatCleanCalendarTile extends StatelessWidget {
                             : inMonth
                                 ? defaultDayColor != null
                                     ? defaultDayColor
-                                    : events != null &&
-                                            events!.isNotEmpty &&
-                                            icon != ''
+                                    : events != null && events!.isNotEmpty && icon != ''
                                         ? Colors.white
                                         : Colors.black
-                                : (defaultOutOfMonthDayColor != null
-                                    ? defaultOutOfMonthDayColor
-                                    : Colors.grey),
+                                : (defaultOutOfMonthDayColor != null ? defaultOutOfMonthDayColor : Colors.grey),
                   ),
                   // Grey color for previous or next months dates
-                ), 
+                ),
                 // Dots for the events
                 events != null && events!.length > 0
                     ? Row(
@@ -171,8 +167,7 @@ class NeatCleanCalendarTile extends StatelessWidget {
                           // Show a maximum of 3 dots.
                           if (eventCount > 3) return Container();
                           return Container(
-                            margin: EdgeInsets.only(
-                                left: 2.0, right: 2.0, top: 1.0),
+                            margin: EdgeInsets.only(left: 2.0, right: 2.0, top: 1.0),
                             width: 5.0,
                             height: 5.0,
                             decoration: BoxDecoration(
@@ -189,12 +184,9 @@ class NeatCleanCalendarTile extends StatelessWidget {
                                 // gets used. If the eveent has its property isDone set to true, the
                                 // eventDoneColor gets used.
                                 if (event.isDone) {
-                                  return eventDoneColor ??
-                                      Theme.of(context).primaryColor;
+                                  return eventDoneColor ?? Theme.of(context).primaryColor;
                                 }
-                                return eventColor ??
-                                    event.color ??
-                                    Theme.of(context).colorScheme.secondary;
+                                return eventColor ?? event.color ?? Theme.of(context).colorScheme.secondary;
                               }()),
                             ),
                           );

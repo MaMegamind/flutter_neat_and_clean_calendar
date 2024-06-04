@@ -18,7 +18,7 @@ import './simple_gesture_detector.dart';
 // Export NeatCleanCalendarEvent for using it in the application
 export './neat_and_clean_calendar_event.dart';
 
-typedef DayBuilder(BuildContext context, DateTime day);
+typedef DayBuilder(BuildContext context, DateTime day,bool inMonth);
 typedef EventListBuilder(BuildContext context, List<NeatCleanCalendarEvent> events);
 
 enum DatePickerType { hidden, year, date }
@@ -481,7 +481,7 @@ class _CalendarState extends State<Calendar> {
             eventDoneColor: widget.eventDoneColor,
             events: eventsMap![day],
             isDayOfWeek: true,
-            dayOfWeek: day.characters.first,
+            dayOfWeek: day,
             dayOfWeekStyle: widget.dayOfWeekStyle ??
                 TextStyle(
                   color: widget.selectedColor,
@@ -529,7 +529,7 @@ class _CalendarState extends State<Calendar> {
               eventColor: widget.eventColor,
               eventDoneColor: widget.eventDoneColor,
               events: eventsMap![day],
-              child: widget.dayBuilder!(context, day),
+              child: widget.dayBuilder!(context, day,day.month == selectedDate.month),
               date: day,
               onDateSelected: () => handleSelectedDateAndUserCallback(day),
             ),
