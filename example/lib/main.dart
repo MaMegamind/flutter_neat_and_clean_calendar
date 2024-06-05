@@ -111,8 +111,18 @@ class _CalendarScreenState extends State<CalendarScreen> {
       body: SafeArea(
         child: Calendar(
           startOnMonday: true,
-          weekDays: ['M', 'D', 'M', 'D', 'F', 'S', 'S'],
-          eventsList: _eventList,
+          // weekDays: ['M', 'D', 'M', 'D', 'F', 'S', 'S'],
+          eventsList: List.generate(
+              10,
+              (index) => NeatCleanCalendarEvent(
+                "Event $index",
+                startTime: DateTime.now(),
+                endTime: DateTime.now().add(const Duration(days: 1)),
+                description: 'Description $index',
+                //color: Colors.blue,
+                isMultiDay: true,
+              ),
+            ),
           isExpandable: true,
           eventDoneColor: Colors.deepPurple,
           selectedColor: Colors.blue,

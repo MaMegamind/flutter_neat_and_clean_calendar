@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_neat_and_clean_calendar/provider_image.dart';
-import "package:intl/intl.dart";
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
 
 // import 'package:flutter_neat_and_clean_calendar/platform_widgets.dart';
 import './date_utils.dart';
@@ -79,12 +79,15 @@ class NeatCleanCalendarTile extends StatelessWidget {
     if (isDayOfWeek) {
       return new GestureDetector(
         child: new Container(
-          alignment: Alignment.center,
-          margin: EdgeInsets.symmetric(horizontal: 12),
+          // padding: EdgeInsets.symmetric(vertical: 12.r, ),
+          margin: EdgeInsets.symmetric(horizontal: 10.r),
+          //width: 24.w,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20.0),
             color: Color(0xFFEBEBEB),
+            borderRadius: BorderRadius.circular(15.r),
           ),
+          alignment: Alignment.center,
+
           child: Text(
             dayOfWeek ?? '',
             style: dayOfWeekStyle,
@@ -97,106 +100,107 @@ class NeatCleanCalendarTile extends StatelessWidget {
       int eventCount = 0;
       return GestureDetector(
         onTap: onDateSelected, // react on tapping
-        child: Padding(
-          padding: const EdgeInsets.all(1.0),
-          child: Container(
-            // If this tile is the selected date, draw a colored circle on it. The circle is filled with
-            // the color passed with the selectedColor parameter or red color.
-            decoration: isSelected && date != null
-                ? BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: selectedColor != null
-                        ? Utils.isSameDay(this.date!, DateTime.now())
-                            ? selectedTodayColor != null
-                                ? selectedTodayColor
-                                : Colors.red
-                            : selectedColor
-                        : Theme.of(context).primaryColor,
-                    image: events != null && events!.isNotEmpty
-                        ? icon != '' && icon != null
-                            ? DecorationImage(
-                                fit: BoxFit.cover,
-                                image: providerImage(icon!),
-                              )
-                            : null
-                        : null,
-                  )
-                : events == null
-                    ? BoxDecoration()
-                    : events!.isNotEmpty
-                        ? BoxDecoration(
-                            borderRadius: BorderRadius.circular(20.0),
-                            color: Color(isSelected ? 0xFF004185 : 0xFF68A1B8),
-                            // shape: BoxShape.circle,
-                            // image: icon != '' && icon != null
-                            //     ? DecorationImage(
-                            //         fit: BoxFit.cover,
-                            //         image: providerImage(icon!),
-                            //       )
-                            //     : null,
-                          )
-                        : BoxDecoration(), // no decoration when not selected
-            alignment: Alignment.center,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                // Date display
-                Text(
-                  date != null ? DateFormat("d").format(date!) : '',
-                  style: TextStyle(
-                    fontSize: 14.0,
-                    fontWeight: FontWeight.w400,
-                    color: isSelected && this.date != null
-                        ? Colors.white
-                        : Utils.isSameDay(this.date!, DateTime.now())
-                            ? todayColor
-                            : inMonth
-                                ? defaultDayColor != null
-                                    ? defaultDayColor
-                                    : events != null && events!.isNotEmpty && icon != ''
-                                        ? Colors.white
-                                        : Colors.black
-                                : (defaultOutOfMonthDayColor != null ? defaultOutOfMonthDayColor : Colors.grey),
-                  ),
-                  // Grey color for previous or next months dates
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.amber,
+            borderRadius: BorderRadius.circular(20.r),
+          ),
+          //   // If this tile is the selected date, draw a colored circle on it. The circle is filled with
+          //   // the color passed with the selectedColor parameter or red color.
+          //   // decoration: isSelected && date != null
+          //   //     ? BoxDecoration(
+          //   //         shape: BoxShape.circle,
+          //   //         color: selectedColor != null
+          //   //             ? Utils.isSameDay(this.date!, DateTime.now())
+          //   //                 ? selectedTodayColor != null
+          //   //                     ? selectedTodayColor
+          //   //                     : Colors.red
+          //   //                 : selectedColor
+          //   //             : Theme.of(context).primaryColor,
+          //           // image: events != null && events!.isNotEmpty
+          //           //     ? icon != '' && icon != null
+          //           //         ? DecorationImage(
+          //           //             //!SECTION: BoxFit.cover,
+          //           //             //image: providerImage(icon!),
+          //           //           )
+          //           //         : null
+          //           //     : null,
+          //         // )
+          //       // : events == null
+          //       //     ? BoxDecoration()
+          //       //     : events!.isNotEmpty
+          //       //         ? BoxDecoration(
+          //       //             borderRadius: BorderRadius.circular(20.0),
+          //       //             color: Color(isSelected ? 0xFF004185 : 0xFF68A1B8),
+          //                   // shape: BoxShape.circle,
+          //                   // image: icon != '' && icon != null
+          //                   //     ? DecorationImage(
+          //                   //         fit: BoxFit.cover,
+          //                   //         image: providerImage(icon!),
+          //                   //       )
+          //                   //     : null,
+          //                 // )
+          //               // : BoxDecoration(), // no decoration when not selected
+          alignment: Alignment.center,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              // Date display
+              Text(
+                date != null ? DateFormat("d").format(date!) : '',
+                style: TextStyle(
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w400,
+                  color: isSelected && this.date != null
+                      ? Colors.white
+                      : Utils.isSameDay(this.date!, DateTime.now())
+                          ? todayColor
+                          : inMonth
+                              ? defaultDayColor != null
+                                  ? defaultDayColor
+                                  : events != null && events!.isNotEmpty && icon != ''
+                                      ? Colors.white
+                                      : Colors.black
+                              : (defaultOutOfMonthDayColor != null ? defaultOutOfMonthDayColor : Colors.grey),
                 ),
-                // Dots for the events
-                events != null && events!.length > 0
-                    ? Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: events!.map((event) {
-                          eventCount++;
-                          // Show a maximum of 3 dots.
-                          if (eventCount > 3) return Container();
-                          return Container(
-                            margin: EdgeInsets.only(left: 2.0, right: 2.0, top: 1.0),
-                            width: 5.0,
-                            height: 5.0,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              // If event is done (isDone == true) set the color of the dots to
-                              // the eventDoneColor (if given) otherwise use the primary color of
-                              // the theme
-                              // If the event is not done yet, we use the given eventColor or the
-                              // color property of the NeatCleanCalendarEvent. If both aren't set, then
-                              // the accent color of the theme get used.
-                              color: (() {
-                                if (isSelected) return Colors.white;
-                                // If eventColor property was not set, the color defined for the event
-                                // gets used. If the eveent has its property isDone set to true, the
-                                // eventDoneColor gets used.
-                                if (event.isDone) {
-                                  return eventDoneColor ?? Theme.of(context).primaryColor;
-                                }
-                                return eventColor ?? event.color ?? Theme.of(context).colorScheme.secondary;
-                              }()),
-                            ),
-                          );
-                        }).toList(),
-                      )
-                    : Container(),
-              ],
-            ),
+                // Grey color for previous or next months dates
+              ),
+              // Dots for the events
+              events != null && events!.length > 0
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: events!.map((event) {
+                        eventCount++;
+                        // Show a maximum of 3 dots.
+                        if (eventCount > 3) return Container();
+                        return Container(
+                          margin: EdgeInsets.only(left: 2.0, right: 2.0, top: 1.0),
+                          width: 5.0,
+                          height: 5.0,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            // If event is done (isDone == true) set the color of the dots to
+                            // the eventDoneColor (if given) otherwise use the primary color of
+                            // the theme
+                            // If the event is not done yet, we use the given eventColor or the
+                            // color property of the NeatCleanCalendarEvent. If both aren't set, then
+                            // the accent color of the theme get used.
+                            color: (() {
+                              if (isSelected) return Colors.white;
+                              // If eventColor property was not set, the color defined for the event
+                              // gets used. If the eveent has its property isDone set to true, the
+                              // eventDoneColor gets used.
+                              if (event.isDone) {
+                                return eventDoneColor ?? Theme.of(context).primaryColor;
+                              }
+                              return eventColor ?? event.color ?? Theme.of(context).colorScheme.secondary;
+                            }()),
+                          ),
+                        );
+                      }).toList(),
+                    )
+                  : Container(),
+            ],
           ),
         ),
       );
@@ -224,6 +228,7 @@ class NeatCleanCalendarTile extends StatelessWidget {
         onTap: onDateSelected,
       );
     }
+    // this for the weekday header row
     return Container(
       child: renderDateOrDayOfWeek(context),
     );

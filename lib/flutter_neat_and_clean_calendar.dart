@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_neat_and_clean_calendar/date_picker_config.dart';
 import 'package:flutter_neat_and_clean_calendar/provider_image.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 
@@ -18,7 +19,7 @@ import './simple_gesture_detector.dart';
 // Export NeatCleanCalendarEvent for using it in the application
 export './neat_and_clean_calendar_event.dart';
 
-typedef DayBuilder(BuildContext context, DateTime day, bool inMonth);
+typedef DayBuilder(BuildContext context, DateTime day, bool inMonth, bool hasEvent, bool isSelected);
 typedef EventListBuilder(BuildContext context, List<NeatCleanCalendarEvent> events);
 
 enum DatePickerType { hidden, year, date }
@@ -444,10 +445,10 @@ class _CalendarState extends State<Calendar> {
             // SizedBox(height: 12.0),
             Container(
               padding: EdgeInsets.only(top: 12.0, bottom: 12),
-              margin: EdgeInsets.all(12.0),
+              margin: EdgeInsets.symmetric(horizontal: 12.r,vertical: 12.h),
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(
-                    10.0,
+                    10.r,
                   ),
                   color: Color(0xFFEBEBEB)),
               child: GridView.count(
@@ -530,7 +531,13 @@ class _CalendarState extends State<Calendar> {
               eventColor: widget.eventColor,
               eventDoneColor: widget.eventDoneColor,
               events: eventsMap![day],
-              child: widget.dayBuilder!(context, day, day.month == selectedDate.month),
+              child: widget.dayBuilder!(
+                context,
+                day,
+                day.month == selectedDate.month,
+                eventsMap![day] != null && eventsMap![day]!.isNotEmpty,
+                Utils.isSameDay(selectedDate, day),
+              ),
               date: day,
               onDateSelected: () => handleSelectedDateAndUserCallback(day),
             ),
@@ -538,19 +545,20 @@ class _CalendarState extends State<Calendar> {
         } else {
           dayWidgets.add(
             NeatCleanCalendarTile(
-                defaultDayColor: widget.defaultDayColor,
-                defaultOutOfMonthDayColor: widget.defaultOutOfMonthDayColor,
-                selectedColor: widget.selectedColor,
-                selectedTodayColor: widget.selectedTodayColor,
-                todayColor: widget.todayColor,
-                eventColor: widget.eventColor,
-                eventDoneColor: widget.eventDoneColor,
-                events: eventsMap![day],
-                onDateSelected: () => handleSelectedDateAndUserCallback(day),
-                date: day,
-                dateStyles: configureDateStyle(monthStarted, monthEnded),
-                isSelected: Utils.isSameDay(selectedDate, day),
-                inMonth: day.month == selectedDate.month),
+              defaultDayColor: widget.defaultDayColor,
+              defaultOutOfMonthDayColor: widget.defaultOutOfMonthDayColor,
+              selectedColor: widget.selectedColor,
+              selectedTodayColor: widget.selectedTodayColor,
+              todayColor: widget.todayColor,
+              eventColor: widget.eventColor,
+              eventDoneColor: widget.eventDoneColor,
+              events: eventsMap![day],
+              onDateSelected: () => handleSelectedDateAndUserCallback(day),
+              date: day,
+              dateStyles: configureDateStyle(monthStarted, monthEnded),
+              isSelected: Utils.isSameDay(selectedDate, day),
+              inMonth: day.month == selectedDate.month,
+            ),
           );
         }
       },
@@ -604,12 +612,12 @@ class _CalendarState extends State<Calendar> {
                   ),
                 ),
               ),
-              SizedBox(width: 40.0),
+              SizedBox(width: 40.w),
               Text(
                 DateFormat(widget.expandableDateFormat, widget.locale).format(_selectedDate),
-                style: widget.bottomBarTextStyle ?? TextStyle(fontSize: 13),
+                style: widget.bottomBarTextStyle ?? TextStyle(fontSize: 13.sp),
               ),
-              SizedBox(width: 40.0),
+              SizedBox(width: 40.w),
 
               PlatformIconButton(
                 onPressed: () {},
