@@ -656,6 +656,7 @@ class _CalendarState extends State<Calendar> {
               //
               PlatformIconButton(
                 onPressed: () {
+                  handleSelectedDateAndUserCallback(_selectedDate);
                   widget.onBackDateSelected?.call(_selectedDate);
                 },
                 icon: Container(
@@ -680,6 +681,7 @@ class _CalendarState extends State<Calendar> {
 
               PlatformIconButton(
                 onPressed: () {
+                  handleSelectedDateAndUserCallback(_selectedDate);
                   widget.onNextDateSelected?.call(_selectedDate);
                 },
                 icon: Container(
@@ -921,7 +923,7 @@ class _CalendarState extends State<Calendar> {
                 ),
                 !selectedMonthsDays.contains(_selectedDate)
                   ? SizedBox.shrink()
-                  :   expansionButtonRow,
+                  : expansionButtonRow,
                 SizedBox(height: 12.0),
                 if (widget.showEvents) eventList
               ],
