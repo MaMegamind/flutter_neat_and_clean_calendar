@@ -921,7 +921,8 @@ class _CalendarState extends State<Calendar> {
                   expanded: calendarGridView,
                   isExpanded: isExpanded,
                 ),
-                !selectedMonthsDays.contains(_selectedDate)
+                // has events
+                !widget.showEvents
                   ? SizedBox.shrink()
                   : expansionButtonRow,
                 SizedBox(height: 12.0),
