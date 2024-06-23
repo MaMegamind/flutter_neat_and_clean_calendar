@@ -907,9 +907,7 @@ class _CalendarState extends State<Calendar> {
     // check if date selected date is in the month of the selected date
 
     return
-      // !selectedMonthsDays.contains(_selectedDate)
-      //   ? SizedBox.shrink()
-      //   :
+
     Container(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -921,7 +919,9 @@ class _CalendarState extends State<Calendar> {
                   expanded: calendarGridView,
                   isExpanded: isExpanded,
                 ),
-                expansionButtonRow,
+                !selectedMonthsDays.contains(_selectedDate)
+                  ? SizedBox.shrink()
+                  :   expansionButtonRow,
                 SizedBox(height: 12.0),
                 if (widget.showEvents) eventList
               ],
