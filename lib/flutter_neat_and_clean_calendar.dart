@@ -454,6 +454,8 @@ class _CalendarState extends State<Calendar> {
               margin: EdgeInsets.only(left: 12.0, right: 12.0, top: 12.0),
               child: GridView.count(
                 childAspectRatio: 1.5,
+                // crossAxisSpacing: 4.r,
+                mainAxisSpacing: 4.r,
                 primary: false,
                 shrinkWrap: true,
                 crossAxisCount: 7,
@@ -471,6 +473,8 @@ class _CalendarState extends State<Calendar> {
                   ),
                   color: Color(0xFFEBEBEB)),
               child: GridView.count(
+                // crossAxisSpacing: 4.r,
+                mainAxisSpacing: 4.r,
                 childAspectRatio: 1.5,
                 primary: false,
                 shrinkWrap: true,
@@ -558,7 +562,10 @@ class _CalendarState extends State<Calendar> {
                 Utils.isSameDay(selectedDate, day),
               ),
               date: day,
-              onDateSelected: () => handleSelectedDateAndUserCallback(day),
+              onDateSelected: () {
+                currentEventIndex = eventsMap?.keys.toList().indexOf(day) ?? 0;
+                handleSelectedDateAndUserCallback(day);
+              },
             ),
           );
         } else {
@@ -572,7 +579,10 @@ class _CalendarState extends State<Calendar> {
               eventColor: widget.eventColor,
               eventDoneColor: widget.eventDoneColor,
               events: eventsMap![day],
-              onDateSelected: () => handleSelectedDateAndUserCallback(day),
+              onDateSelected: () {
+                currentEventIndex = eventsMap?.keys.toList().indexOf(day) ?? 0;
+                handleSelectedDateAndUserCallback(day);
+              },
               date: day,
               dateStyles: configureDateStyle(monthStarted, monthEnded),
               isSelected: Utils.isSameDay(selectedDate, day),
@@ -703,13 +713,10 @@ class _CalendarState extends State<Calendar> {
                 padding: EdgeInsets.all(0.0),
                 itemBuilder: (BuildContext context, int index) {
                   final NeatCleanCalendarEvent event = _selectedEvents![index];
-                  final String start =
-                      DateFormat('HH:mm').format(event.startTime).toString();
-                  final String end =
-                      DateFormat('HH:mm').format(event.endTime).toString();
+                  final String start = DateFormat('HH:mm').format(event.startTime).toString();
+                  final String end = DateFormat('HH:mm').format(event.endTime).toString();
                   return Container(
-                    height: widget.eventTileHeight ??
-                        MediaQuery.of(context).size.height * 0.08,
+                    height: widget.eventTileHeight ?? MediaQuery.of(context).size.height * 0.08,
                     child: GestureDetector(
                       behavior: HitTestBehavior.opaque,
                       onTap: () {
@@ -726,9 +733,7 @@ class _CalendarState extends State<Calendar> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
                           Expanded(
-                            flex: event.wide != null && event.wide! == true
-                                ? 25
-                                : 5,
+                            flex: event.wide != null && event.wide! == true ? 25 : 5,
                             child: Padding(
                               padding: const EdgeInsets.all(4.0),
                               child: Container(
@@ -737,10 +742,7 @@ class _CalendarState extends State<Calendar> {
                                   // If the event has set isDone to true, use the eventDoneColor
                                   // gets used. If that eventDoneColor is not set, use the
                                   // primaryColor of the theme.
-                                  color: event.isDone
-                                      ? widget.eventDoneColor ??
-                                          Theme.of(context).primaryColor
-                                      : event.color,
+                                  color: event.isDone ? widget.eventDoneColor ?? Theme.of(context).primaryColor : event.color,
                                   borderRadius: BorderRadius.circular(10),
                                   image: event.icon != '' && event.icon != null
                                       ? DecorationImage(
@@ -761,10 +763,7 @@ class _CalendarState extends State<Calendar> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text(event.summary,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodySmall),
+                                  Text(event.summary, style: Theme.of(context).textTheme.bodySmall),
                                   SizedBox(
                                     height: 10.0,
                                   ),
@@ -783,9 +782,7 @@ class _CalendarState extends State<Calendar> {
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               // If the event is all day, then display the word "All day" with no time.
-                              child: event.isAllDay || event.isMultiDay
-                                  ? allOrMultiDayDayTimeWidget(event)
-                                  : singleDayTimeWidget(start, end),
+                              child: event.isAllDay || event.isMultiDay ? allOrMultiDayDayTimeWidget(event) : singleDayTimeWidget(start, end),
                             ),
                           )
                         ],
@@ -890,7 +887,7 @@ class _CalendarState extends State<Calendar> {
             isExpanded: isExpanded,
           ),
           // has events
-          // !(eventsMap?[selectedDate]?.isNotEmpty == true) ? SizedBox.shrink() : 
+          // (eventsMap?[_selectedDate]?.isEmpty == true) ? SizedBox.shrink() :
           expansionButtonRow,
 
           SizedBox(height: 12.h),
