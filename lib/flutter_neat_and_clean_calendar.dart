@@ -637,8 +637,8 @@ class _CalendarState extends State<Calendar> {
                     : null,
                 icon: Container(
                   padding: EdgeInsets.all(0.0),
-                  width: 24.r,
-                  height: 24.r,
+                  width: 72.r,
+                  height: 72.r,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: currentEventIndex > 0 ? Color(0xFF3DB3E3) : Color(0xFFEBEBEB),
@@ -646,7 +646,7 @@ class _CalendarState extends State<Calendar> {
                   child: Icon(
                     Icons.keyboard_arrow_left_outlined,
                     color: Colors.white,
-                    size: 8.r,
+                    size: 24.r,
                   ),
                 ),
               ),
@@ -668,8 +668,8 @@ class _CalendarState extends State<Calendar> {
                     : null,
                 icon: Container(
                   padding: EdgeInsets.all(0.0),
-                  width: 24.r,
-                  height: 24.r,
+                  width: 72.r,
+                  height: 72.r,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: currentEventIndex < eventDaysListLength - 1 ? Color(0xFF3DB3E3) : Color(0xFFEBEBEB),
@@ -677,7 +677,7 @@ class _CalendarState extends State<Calendar> {
                   child: Icon(
                     Icons.keyboard_arrow_right_outlined,
                     color: Colors.white,
-                    size: 8.r,
+                    size: 24.r,
                   ),
                 ),
               ),
