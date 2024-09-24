@@ -138,8 +138,6 @@ class Calendar extends StatefulWidget {
   final DatePickerConfig? datePickerConfig;
   final double? eventTileHeight;
   final bool showEvents;
-  final Widget? singleRightArrow;
-  final Widget? singleLeftArrow;
 
   /// Configures the date picker if enabled
 
@@ -185,8 +183,6 @@ class Calendar extends StatefulWidget {
     this.showEvents = true,
     this.onNextDateSelected,
     this.onBackDateSelected,
-    this.singleLeftArrow,
-    this.singleRightArrow,
   });
 
   @override
@@ -630,8 +626,8 @@ class _CalendarState extends State<Calendar> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              PlatformIconButton(
-                onPressed: currentEventIndex > 0
+              GestureDetector(
+                onTap: currentEventIndex > 0
                     ? () {
                         currentEventIndex--;
 
@@ -639,7 +635,17 @@ class _CalendarState extends State<Calendar> {
                         widget.onBackDateSelected?.call(_selectedDate);
                       }
                     : null,
-                icon: widget.singleLeftArrow,
+                child: Container(
+                  padding: EdgeInsets.all(0.0),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: currentEventIndex > 0 ? Color(0xFF3DB3E3) : Color(0xFFEBEBEB),
+                  ),
+                  child: Icon(
+                    Icons.keyboard_arrow_left_outlined,
+                    color: Colors.white,
+                  ),
+                ),
               ),
               SizedBox(width: 40.w),
               Text(
@@ -648,8 +654,8 @@ class _CalendarState extends State<Calendar> {
               ),
               SizedBox(width: 40.w),
 
-              PlatformIconButton(
-                onPressed: currentEventIndex < eventDaysListLength - 1
+              GestureDetector(
+                onTap: currentEventIndex < eventDaysListLength - 1
                     ? () {
                         currentEventIndex++;
                         handleSelectedDateAndUserCallback(eventsMap?.keys.elementAtOrNull(currentEventIndex) ?? DateTime.now());
@@ -657,7 +663,17 @@ class _CalendarState extends State<Calendar> {
                         widget.onNextDateSelected?.call(_selectedDate);
                       }
                     : null,
-                icon: widget.singleRightArrow,
+                child: Container(
+                  padding: EdgeInsets.all(0.0),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: currentEventIndex < eventDaysListLength - 1 ? Color(0xFF3DB3E3) : Color(0xFFEBEBEB),
+                  ),
+                  child: Icon(
+                    Icons.keyboard_arrow_right_outlined,
+                    color: Colors.white,
+                  ),
+                ),
               ),
 
               // PlatformIconButton(
