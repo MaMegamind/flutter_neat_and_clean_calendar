@@ -138,6 +138,8 @@ class Calendar extends StatefulWidget {
   final DatePickerConfig? datePickerConfig;
   final double? eventTileHeight;
   final bool showEvents;
+  final Widget? singleRightArrow;
+  final Widget? singleLeftArrow;
 
   /// Configures the date picker if enabled
 
@@ -183,6 +185,8 @@ class Calendar extends StatefulWidget {
     this.showEvents = true,
     this.onNextDateSelected,
     this.onBackDateSelected,
+    this.singleLeftArrow,
+    this.singleRightArrow,
   });
 
   @override
@@ -635,20 +639,7 @@ class _CalendarState extends State<Calendar> {
                         widget.onBackDateSelected?.call(_selectedDate);
                       }
                     : null,
-                icon: Container(
-                  padding: EdgeInsets.all(0.0),
-                  width: 72.r,
-                  height: 72.r,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: currentEventIndex > 0 ? Color(0xFF3DB3E3) : Color(0xFFEBEBEB),
-                  ),
-                  child: Icon(
-                    Icons.keyboard_arrow_left_outlined,
-                    color: Colors.white,
-                    size: 24.r,
-                  ),
-                ),
+                icon: widget.singleLeftArrow,
               ),
               SizedBox(width: 40.w),
               Text(
@@ -666,20 +657,7 @@ class _CalendarState extends State<Calendar> {
                         widget.onNextDateSelected?.call(_selectedDate);
                       }
                     : null,
-                icon: Container(
-                  padding: EdgeInsets.all(0.0),
-                  width: 72.r,
-                  height: 72.r,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: currentEventIndex < eventDaysListLength - 1 ? Color(0xFF3DB3E3) : Color(0xFFEBEBEB),
-                  ),
-                  child: Icon(
-                    Icons.keyboard_arrow_right_outlined,
-                    color: Colors.white,
-                    size: 24.r,
-                  ),
-                ),
+                icon: widget.singleRightArrow,
               ),
 
               // PlatformIconButton(
