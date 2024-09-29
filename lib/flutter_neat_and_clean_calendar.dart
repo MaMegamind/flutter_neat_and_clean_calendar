@@ -2,6 +2,8 @@
 
 library flutter_neat_and_clean_calendar;
 
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_neat_and_clean_calendar/date_picker_config.dart';
 import 'package:flutter_neat_and_clean_calendar/provider_image.dart';
@@ -138,6 +140,7 @@ class Calendar extends StatefulWidget {
   final DatePickerConfig? datePickerConfig;
   final double? eventTileHeight;
   final bool showEvents;
+  final bool isArabic;
 
   /// Configures the date picker if enabled
 
@@ -183,6 +186,7 @@ class Calendar extends StatefulWidget {
     this.showEvents = true,
     this.onNextDateSelected,
     this.onBackDateSelected,
+    required this.isArabic,
   });
 
   @override
@@ -306,9 +310,13 @@ class _CalendarState extends State<Calendar> {
             shape: BoxShape.circle,
             color: Color(0xFF3DB3E3),
           ),
-          child: Icon(
-            Icons.keyboard_double_arrow_left_outlined,
-            color: Colors.white,
+          child: Transform(
+            alignment: Alignment.center,
+            transform: !widget.isArabic ? Matrix4.rotationY(math.pi * 2) : Matrix4.rotationY(math.pi),
+            child: Icon(
+              Icons.keyboard_double_arrow_left_outlined,
+              color: Colors.white,
+            ),
           ),
         ),
       );
@@ -319,9 +327,13 @@ class _CalendarState extends State<Calendar> {
             shape: BoxShape.circle,
             color: Color(0xFF3DB3E3),
           ),
-          child: Icon(
-            Icons.keyboard_double_arrow_right_outlined,
-            color: Colors.white,
+          child: Transform(
+            alignment: Alignment.center,
+            transform: !widget.isArabic ? Matrix4.rotationY(math.pi * 2) : Matrix4.rotationY(math.pi),
+            child: Icon(
+              Icons.keyboard_double_arrow_right_outlined,
+              color: Colors.white,
+            ),
           ),
         ),
       );
@@ -641,9 +653,13 @@ class _CalendarState extends State<Calendar> {
                     shape: BoxShape.circle,
                     color: currentEventIndex > 0 ? Color(0xFF3DB3E3) : Color(0xFFEBEBEB),
                   ),
-                  child: Icon(
-                    Icons.keyboard_arrow_left_outlined,
-                    color: Colors.white,
+                  child: Transform(
+                    alignment: Alignment.center,
+                    transform: !widget.isArabic ? Matrix4.rotationY(math.pi * 2) : Matrix4.rotationY(math.pi),
+                    child: Icon(
+                      Icons.keyboard_arrow_left_outlined,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),
@@ -669,9 +685,13 @@ class _CalendarState extends State<Calendar> {
                     shape: BoxShape.circle,
                     color: currentEventIndex < eventDaysListLength - 1 ? Color(0xFF3DB3E3) : Color(0xFFEBEBEB),
                   ),
-                  child: Icon(
-                    Icons.keyboard_arrow_right_outlined,
-                    color: Colors.white,
+                  child: Transform(
+                    alignment: Alignment.center,
+                    transform: !widget.isArabic ? Matrix4.rotationY(math.pi * 2) : Matrix4.rotationY(math.pi),
+                    child: Icon(
+                      Icons.keyboard_arrow_right_outlined,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),
