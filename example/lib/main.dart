@@ -29,10 +29,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
   List<NeatCleanCalendarEvent> _todaysEvents = [
     NeatCleanCalendarEvent(
       'Event A',
-      startTime: DateTime(
-          DateTime.now().year, DateTime.now().month, DateTime.now().day, 10, 0),
-      endTime: DateTime(
-          DateTime.now().year, DateTime.now().month, DateTime.now().day, 12, 0),
+      startTime: DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 10, 0),
+      endTime: DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 12, 0),
       description: 'A special event',
       color: Colors.blue[700],
     ),
@@ -42,44 +40,33 @@ class _CalendarScreenState extends State<CalendarScreen> {
     NeatCleanCalendarEvent(
       'MultiDay Event A',
       description: 'test desc',
-      startTime: DateTime(
-          DateTime.now().year, DateTime.now().month, DateTime.now().day, 10, 0),
-      endTime: DateTime(DateTime.now().year, DateTime.now().month,
-          DateTime.now().day + 2, 12, 0),
+      startTime: DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 10, 0),
+      endTime: DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day + 2, 12, 0),
       color: Colors.orange,
       isMultiDay: true,
     ),
-    NeatCleanCalendarEvent(
-      'Event X',
+    NeatCleanCalendarEvent('Event X',
         description: 'test desc',
-        startTime: DateTime(DateTime.now().year, DateTime.now().month,
-            DateTime.now().day, 10, 30),
-        endTime: DateTime(DateTime.now().year, DateTime.now().month,
-            DateTime.now().day, 11, 30),
+        startTime: DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 10, 30),
+        endTime: DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 11, 30),
         color: Colors.lightGreen,
         isAllDay: false,
         isDone: true,
         icon: 'assets/event1.jpg',
         wide: false),
-    NeatCleanCalendarEvent(
-      'Allday Event B',
-      description: 'test desc',
-      startTime: DateTime(DateTime.now().year, DateTime.now().month,
-          DateTime.now().day - 2, 14, 30),
-      endTime: DateTime(DateTime.now().year, DateTime.now().month,
-          DateTime.now().day + 2, 17, 0),
-      color: Colors.pink,
-      isAllDay: true,
+    NeatCleanCalendarEvent('Allday Event B',
+        description: 'test desc',
+        startTime: DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day - 2, 14, 30),
+        endTime: DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day + 2, 17, 0),
+        color: Colors.pink,
+        isAllDay: true,
         icon: 'assets/event1.jpg',
-        wide: false
-    ),
+        wide: false),
     NeatCleanCalendarEvent(
       'Normal Event D',
       description: 'test desc',
-      startTime: DateTime(DateTime.now().year, DateTime.now().month,
-          DateTime.now().day, 14, 30),
-      endTime: DateTime(
-          DateTime.now().year, DateTime.now().month, DateTime.now().day, 17, 0),
+      startTime: DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 14, 30),
+      endTime: DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 17, 0),
       color: Colors.indigo,
       wide: true,
       icon: 'assets/events.jpg',
@@ -87,10 +74,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
     NeatCleanCalendarEvent(
       'Normal Event E',
       description: 'test desc',
-      startTime: DateTime(
-          DateTime.now().year, DateTime.now().month, DateTime.now().day, 7, 45),
-      endTime: DateTime(
-          DateTime.now().year, DateTime.now().month, DateTime.now().day, 9, 0),
+      startTime: DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 7, 45),
+      endTime: DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 9, 0),
       color: Colors.indigo,
       wide: true,
       icon: 'assets/profile.jpg',
@@ -101,8 +86,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
   void initState() {
     super.initState();
     // Force selection of today on first load, so that the list of today's events gets shown.
-    _handleNewDate(DateTime(
-        DateTime.now().year, DateTime.now().month, DateTime.now().day));
+    _handleNewDate(DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day));
   }
 
   @override
@@ -110,19 +94,20 @@ class _CalendarScreenState extends State<CalendarScreen> {
     return Scaffold(
       body: SafeArea(
         child: Calendar(
+          isArabic: false,
           startOnMonday: true,
           // weekDays: ['M', 'D', 'M', 'D', 'F', 'S', 'S'],
           eventsList: List.generate(
-              10,
-              (index) => NeatCleanCalendarEvent(
-                "Event $index",
-                startTime: DateTime.now(),
-                endTime: DateTime.now().add(const Duration(days: 1)),
-                description: 'Description $index',
-                //color: Colors.blue,
-                isMultiDay: true,
-              ),
+            10,
+            (index) => NeatCleanCalendarEvent(
+              "Event $index",
+              startTime: DateTime.now(),
+              endTime: DateTime.now().add(const Duration(days: 1)),
+              description: 'Description $index',
+              //color: Colors.blue,
+              isMultiDay: true,
             ),
+          ),
           isExpandable: true,
           eventDoneColor: Colors.deepPurple,
           selectedColor: Colors.blue,
@@ -153,8 +138,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
           datePickerType: DatePickerType.date,
           defaultDayColor: Colors.green,
           defaultOutOfMonthDayColor: Colors.grey,
-          dayOfWeekStyle: TextStyle(
-              color: Colors.black, fontWeight: FontWeight.w800, fontSize: 11),
+          dayOfWeekStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w800, fontSize: 11),
           showEvents: showEvents,
         ),
       ),

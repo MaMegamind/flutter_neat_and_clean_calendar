@@ -215,10 +215,52 @@ class _CalendarState extends State<Calendar> {
     isExpanded = widget.isExpanded;
 
     _selectedDate = widget.initialDate ?? DateTime.now();
+
     initializeDateFormatting(widget.locale, null).then((_) => setState(() {
           var monthFormat = DateFormat('MMMM yyyy', widget.locale).format(_selectedDate);
           displayMonth = '${monthFormat[0].toUpperCase()}${monthFormat.substring(1)}';
         }));
+
+    _updateEventsMap();
+    final nearestDate = findNearestDate(eventsMap?.keys.toList() ?? [], DateTime.now());
+    print('nearestDate: $nearestDate');
+    if (nearestDate != null) {
+      currentEventIndex = (eventsMap ?? {}).keys.toList().indexOf(nearestDate);
+      handleSelectedDateAndUserCallback(nearestDate);
+    }
+  }
+
+  DateTime? findNearestDate(List<DateTime> dates, DateTime currentDate) {
+    if (dates.isEmpty) return null; // Handle empty list
+    dates.sort(
+      (a, b) => a.compareTo(b),
+    );
+
+    List<DateTime> filteredDates = dates.where((date) => date == currentDate).toList();
+
+    if (filteredDates.isNotEmpty) {
+      return filteredDates.first;
+    }
+
+    // Filter out past dates
+    List<DateTime> futureDates = dates.where((date) => date.isAfter(currentDate) || date.isAtSameMomentAs(currentDate)).toList();
+
+    if (futureDates.isNotEmpty) {
+      // Find the nearest future date
+      futureDates.sort((a, b) {
+        return a.difference(currentDate).inSeconds;
+      });
+      return futureDates.last;
+    }
+
+    // If no future dates, fallback to the nearest past date
+    dates.sort((a, b) {
+      int diffA = (a.difference(currentDate).inSeconds).abs();
+      int diffB = (b.difference(currentDate).inSeconds).abs();
+      return diffA.compareTo(diffB);
+    });
+
+    return dates.first;
   }
 
   /// The method [_updateEventsMap] has the purpose to update the eventsMap, when the calendar widget
@@ -226,6 +268,7 @@ class _CalendarState extends State<Calendar> {
   /// given eventsList. This can be used to update the events shown by the calendar.
   void _updateEventsMap() {
     eventsMap = widget.events ?? {};
+
     eventDaysListLength = eventsMap?.keys.length ?? 0;
     print('------------------_updateEventsMap---------------------');
     print(eventDaysListLength);
@@ -639,14 +682,17 @@ class _CalendarState extends State<Calendar> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               GestureDetector(
-                onTap: currentEventIndex > 0
-                    ? () {
-                        currentEventIndex--;
+                onTap: () {
+                  if (currentEventIndex > 0) {
+                    currentEventIndex--;
 
-                        handleSelectedDateAndUserCallback(eventsMap?.keys.elementAtOrNull(currentEventIndex) ?? DateTime.now());
-                        widget.onBackDateSelected?.call(_selectedDate);
-                      }
-                    : null,
+                    handleSelectedDateAndUserCallback(
+                      eventsMap?.keys.elementAtOrNull(currentEventIndex) ?? DateTime.now(),
+                      forcedDate: (eventsMap ?? {}).keys.toList()[currentEventIndex],
+                    );
+                    widget.onBackDateSelected?.call(_selectedDate);
+                  } else {}
+                },
                 child: Container(
                   padding: EdgeInsets.all(0.0),
                   decoration: BoxDecoration(
@@ -674,7 +720,11 @@ class _CalendarState extends State<Calendar> {
                 onTap: currentEventIndex < eventDaysListLength - 1
                     ? () {
                         currentEventIndex++;
-                        handleSelectedDateAndUserCallback(eventsMap?.keys.elementAtOrNull(currentEventIndex) ?? DateTime.now());
+
+                        handleSelectedDateAndUserCallback(
+                          eventsMap?.keys.elementAtOrNull(currentEventIndex) ?? DateTime.now(),
+                          forcedDate: (eventsMap ?? {}).keys.toList()[currentEventIndex],
+                        );
 
                         widget.onNextDateSelected?.call(_selectedDate);
                       }
@@ -718,6 +768,22 @@ class _CalendarState extends State<Calendar> {
     } else {
       return Container();
     }
+  }
+
+  bool dateInRange(DateTime date) {
+    final DateTime startDate = eventsMap?.keys.first ?? DateTime.now();
+    final DateTime endDate = eventsMap?.keys.last ?? DateTime.now();
+    return date.isAfter(startDate) && date.isBefore(endDate);
+  }
+
+  bool dateIsAfter(DateTime date) {
+    final DateTime startDate = eventsMap?.keys.first ?? DateTime.now();
+    return date.isAfter(startDate);
+  }
+
+  bool dateIsBefore(DateTime date) {
+    final DateTime endDate = eventsMap?.keys.last ?? DateTime.now();
+    return date.isBefore(endDate);
   }
 
   Widget get eventList {
@@ -877,7 +943,12 @@ class _CalendarState extends State<Calendar> {
   @override
   Widget build(BuildContext context) {
     _updateEventsMap();
-
+    // final nearestDate = findNearestDate(eventsMap?.keys.toList() ?? [], DateTime.now());
+    // print('nearestDate: $nearestDate');
+    // if (nearestDate != null) {
+    //   currentEventIndex = (eventsMap ?? {}).keys.toList().indexOf(nearestDate);
+    //   handleSelectedDateAndUserCallback(nearestDate);
+    // }
     // If _selectedEvents is not null, then we sort the events by isAllDay propeerty, so that
     // all day events are displayed at the top of the list.
     // Slightly inexxficient, to do this sort each time, the widget builds.
@@ -927,8 +998,8 @@ class _CalendarState extends State<Calendar> {
   // If "launchCallback" is true, it also triggers the date selection callback with the new date.
   // The state is then updated with the new selected date, the days in the new month, the display month, and any events on the new date.
   // This function is typically used to navigate to the previous month in a calendar widget.
-  void nextMonth(bool launchCallback) {
-    DateTime _newDate = Utils.nextMonth(_selectedDate);
+  void nextMonth(bool launchCallback, {DateTime? forcedDate}) {
+    DateTime _newDate = forcedDate ?? Utils.nextMonth(_selectedDate);
     // Parameter "launchCallback" is there to avoid triggering the callback twice.
     if (launchCallback) {
       _launchDateSelectionCallback(_newDate);
@@ -949,8 +1020,8 @@ class _CalendarState extends State<Calendar> {
   // If "launchCallback" is true, it also triggers the date selection callback with the new date.
   // The state is then updated with the new selected date, the days in the new month, the display month, and any events on the new date.
   // This function is typically used to navigate to the previous month in a calendar widget.
-  void previousMonth(bool launchCallback) {
-    DateTime _newDate = Utils.previousMonth(_selectedDate);
+  void previousMonth(bool launchCallback, {DateTime? forcedDate}) {
+    DateTime _newDate = forcedDate ?? Utils.previousMonth(_selectedDate);
     // Parameter "launchCallback" is there to avoid triggering the callback twice.
     if (launchCallback) {
       _launchDateSelectionCallback(_newDate);
@@ -1062,7 +1133,7 @@ class _CalendarState extends State<Calendar> {
   // The exact functionality can vary depending on the implementation,
   // but typically this method will store the selected date and then call a
   // user-defined callback function based on this date.
-  void handleSelectedDateAndUserCallback(DateTime day) {
+  void handleSelectedDateAndUserCallback(DateTime day, {DateTime? forcedDate}) {
     print('daySelected: $day');
     // Fire onDateSelected callback and onMonthChanged callback.
     _launchDateSelectionCallback(day);
@@ -1076,11 +1147,11 @@ class _CalendarState extends State<Calendar> {
       if (_selectedDate.year < day.year) {
         // _launchDateSelectionCallback was already called befor. That's why set the
         // "launchCallback" parameter to false, to avoid calling the callback twice.
-        nextMonth(false);
+        nextMonth(false, forcedDate: forcedDate);
       } else {
         // _launchDateSelectionCallback was already called befor. That's why set the
         // "launchCallback" parameter to false, to avoid calling the callback twice.
-        previousMonth(false);
+        previousMonth(false, forcedDate: forcedDate);
       }
     }
     // Check if the selected day falls into the last month. If this is the case,
@@ -1090,11 +1161,11 @@ class _CalendarState extends State<Calendar> {
       if (_selectedDate.year > day.year) {
         // _launchDateSelectionCallback was already called befor. That's why set the
         // "launchCallback" parameter to false, to avoid calling the callback twice.
-        previousMonth(false);
+        previousMonth(false, forcedDate: forcedDate);
       } else {
         // _launchDateSelectionCallback was already called befor. That's why set the
         // "launchCallback" parameter to false, to avoid calling the callback twice.
-        nextMonth(false);
+        nextMonth(false, forcedDate: forcedDate);
       }
     }
     setState(() {
